@@ -3,17 +3,24 @@ const express = require("express");
 const app = express();
 const cors = require("cors");
 const config = { port: process.env.PORT || 3000 };
+const LoremIpsum = require("lorem-ipsum").LoremIpsum;
 
 // middleware
 app.use(cors());
 
 // your API route(s) here
-app.get("/lorem", (req, res) => {
-  const lorem = {
-    lorem:
-      "Dolor esse cupidatat ipsum commodo ut duis id esse voluptate. Consectetur cupidatat non qui sint amet minim aute aliquip.",
-  };
-  res.send(lorem);
+app.get("/lorem/", (req, res) => {
+  const lorem = new LoremIpsum({
+    sentencesPerParagraph: {
+      max: 5,
+      min: 4,
+    },
+    wordsPerSentence: {
+      max: 15,
+      min: 4,
+    },
+  });
+  res.send({ lorem: lorem.generateParagraphs(5) });
 });
 
 app.get("*", function (req, res) {
